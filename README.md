@@ -9,11 +9,11 @@ and one running a filebeat agent forwarding its logs to the ELK stack.
 
 First clone the git repo:
 
-   git clone https://github.com/kevinwaro/elk-stack.git && cd elk-stack
+    git clone https://github.com/kevinwaro/elk-stack.git && cd elk-stack
 
 Then let Vagrant play the music:
 
-   vagrant up
+    vagrant up
 
 ### Kibana Dashboard:
 
@@ -23,11 +23,11 @@ Once Vagrant has been ran, you can open your browser at the address http://192.1
 
 You can log into the boxes by running the following commands:
 
-   vagrant ssh elasticsearch
+    vagrant ssh elasticsearch
 
 or:
 
-   vagrant ssh client
+    vagrant ssh client
 
 ### Filebeat modules:
 
