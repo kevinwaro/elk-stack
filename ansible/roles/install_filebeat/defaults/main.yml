@@ -1,0 +1,4 @@
+filebeat_version: filebeat-6.6.1
+elasticsearch_private_ip: 192.168.200.12
+kibana_private_ip: 192.168.200.12
+logstash_private_ip: 192.168.200.12

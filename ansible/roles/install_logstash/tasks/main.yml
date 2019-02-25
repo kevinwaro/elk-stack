@@ -1,0 +1,24 @@
+---
+- name: "Install openjdk8"
+  apt: update_cache=yes name=openjdk-8-jre-headless state=present
+
+- name: "Download Logstash from elastic.co"
+  get_url:
+      url: "https://artifacts.elastic.co/downloads/logstash/{{ logstash_version }}.deb"
+      dest: "/tmp/{{ logstash_version }}.deb"
+
+- name: "Install Logstash package"
+  command: "dpkg -i {{ logstash_version }}.deb"
+  args:
+      chdir: /tmp
+
+- name: "Update general logstash.conf config file"
+  template:
+      src: logstash.conf.j2
+      dest: /etc/logstash/conf.d/logstash.conf
+
+- name: "Enable and restart Logstash service"
+  service:
+      name: logstash
+      enabled: yes
+      state: started

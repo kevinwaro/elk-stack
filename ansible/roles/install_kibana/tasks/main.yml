@@ -1,0 +1,55 @@
+---
+- name: "Download Kibana from elastic.co"
+  get_url:
+      url: "https://artifacts.elastic.co/downloads/kibana/{{ kibana_version }}-amd64.deb"
+      dest: "/tmp/{{ kibana_version }}.deb"
+
+- name: "Install Kibana package"
+  command: "dpkg -i {{ kibana_version }}.deb"
+  args:
+      chdir: /tmp
+
+- name: "Update kibana.yml config file"
+  lineinfile:
+      dest: "/etc/kibana/kibana.yml"
+      regexp: "^#elasticsearch.url"
+      line: "elasticsearch.url: \"http://{{ elasticsearch_private_ip }}:9200\""
+
+- name: "Update kibana.yml config file"
+  lineinfile:
+      dest: "/etc/kibana/kibana.yml"
+      regexp: "^#server.host"
+      line: "server.host: \"0.0.0.0\""
+
+- name: "Enable and restart  kibana service"
+  service:
+      name: kibana
+      enabled: yes
+      state: started
+
+- name: "Install Nginx"
+  apt: name=nginx state=present
+
+- name: "Enable Nginx"
+  service: name=nginx enabled=yes
+
+- name: "Delete default virtualhost symlink"
+  file:
+      path: "/etc/nginx/sites-enabled/default"
+      state: absent
+
+- name: "Create a kibana virtualhost"
+  template:
+      src: kibana_virtualhost.template.j2
+      dest: "/etc/nginx/sites-available/{{ kibana_server_name }}.conf"
+
+- name: "Create the virtualhost symlink in sites-enabled"
+  file:
+      src: "/etc/nginx/sites-available/{{ kibana_server_name }}.conf"
+      dest: "/etc/nginx/sites-enabled/{{ kibana_server_name }}.conf"
+      state: link
+
+- name: "Setup htpassword for nginx"
+  shell: printf "{{ htdigest_user }}:$(openssl passwd -1 {{ htdigest_password }} )\n" >> /etc/nginx/htdigest
+  notify: Restart Nginx
+
