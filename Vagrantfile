@@ -2,7 +2,7 @@
 Vagrant.configure(2) do |config|
 
  config.vm.define "elasticsearch" do |elasticsearch|
-   elasticsearch.vm.box ="debian/stretch64"
+   elasticsearch.vm.box ="debian/buster64"
    elasticsearch.vm.network "private_network", ip: "192.168.200.10"
    elasticsearch.vm.hostname = "elasticsearch"
    elasticsearch.vm.provider "virtualbox" do |vb|
@@ -21,7 +21,7 @@ Vagrant.configure(2) do |config|
  end
 
  config.vm.define "client" do |client|
-   client.vm.box ="debian/stretch64"
+   client.vm.box ="debian/buster64"
    client.vm.network "private_network", ip: "192.168.200.11"
    client.vm.hostname = "client"
    client.vm.provider "virtualbox" do |vb|
