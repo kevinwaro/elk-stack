@@ -4,6 +4,6 @@
   become_method: sudo
   become_user: root
   roles:
-     - role: install_logstash
+#    - role: install_logstash
      - role: install_elasticsearch
      - role: install_kibana
