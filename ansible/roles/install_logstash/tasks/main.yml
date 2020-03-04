@@ -27,8 +27,8 @@
 
 - name: "Download Logstash from elastic.co"
   get_url:
-      url: "https://artifacts.elastic.co/downloads/logstash/{{ logstash_version }}-amd64.deb"
-      dest: "/tmp/{{ logstash_version }}-amd64.deb"
+      url: "https://artifacts.elastic.co/downloads/logstash/{{ logstash_version }}.deb"
+      dest: "/tmp/{{ logstash_version }}.deb"
 
 - name: "Install Logstash package"
   command: "dpkg -i {{ logstash_version }}.deb"

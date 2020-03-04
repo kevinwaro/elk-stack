@@ -29,13 +29,9 @@ or:
 
     vagrant ssh client
 
-### Filebeat modules:
+### Logstash:
 
-By default, on the filebeat agent, the follwing modules will already been enabled:
-
-* apache2
-* system
-* nginx
+As the use of logstash is optional, by default it is not enabled. You can enable it by setting the variable use_logstash to True.
 
 ## Credits:
 

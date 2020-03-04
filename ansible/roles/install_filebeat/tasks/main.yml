@@ -20,6 +20,14 @@
       dest: "/etc/filebeat/filebeat.yml"
       regexp: '^  #host: "localhost:5601"'
       line: "  host: \"{{ elasticsearch_private_ip }}:5601\""
+  when: use_logstash is undefined or use_logstash == False
+
+- name: "Update filebeat.yml config file"
+  lineinfile:
+      dest: "/etc/filebeat/filebeat.yml"
+      regexp: '^  #host: "localhost:5044"'
+      line: "  hosts: [\"{{ logstash_private_ip }}:5044\"]"
+  when: use_logstash == True
 
 - name: "Enable and restart Filebeat service"
   service:
