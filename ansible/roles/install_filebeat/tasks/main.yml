@@ -1,28 +1,25 @@
 ---
-- name: "Install openjdk8"
-  apt: update_cache=yes name=openjdk-8-jre-headless state=present
-
 - name: "Download Filebeat from elastic.co"
   get_url:
       url: "https://artifacts.elastic.co/downloads/beats/filebeat/{{ filebeat_version }}-amd64.deb"
       dest: "/tmp/{{ filebeat_version }}.deb"
 
-- name: "Install Elasticsearch package"
+- name: "Install Filebeat package"
   command: "dpkg -i {{ filebeat_version }}.deb"
   args:
       chdir: /tmp
 
 - name: "Update filebeat.yml config file"
-  template:
-      src: filebeat.yml.j2
-      dest: /etc/filebeat/filebeat.yml
+  lineinfile:
+      dest: "/etc/filebeat/filebeat.yml"
+      regexp: '^  hosts: \["localhost:9200"\]'
+      line: "  hosts: [\"{{ elasticsearch_private_ip }}:9200\"]"
 
-- name: "Enable some modules"
-  command: "filebeat modules enable {{ item }}"
-  with_items:
-      - apache2
-      - system
-      - nginx
+- name: "Update filebeat.yml config file"
+  lineinfile:
+      dest: "/etc/filebeat/filebeat.yml"
+      regexp: '^  #host: "localhost:5601"'
+      line: "  host: \"{{ elasticsearch_private_ip }}:5601\""
 
 - name: "Enable and restart Filebeat service"
   service:

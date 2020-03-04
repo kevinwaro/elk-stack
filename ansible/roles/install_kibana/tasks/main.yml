@@ -12,8 +12,8 @@
 - name: "Update kibana.yml config file"
   lineinfile:
       dest: "/etc/kibana/kibana.yml"
-      regexp: "^#elasticsearch.url"
-      line: "elasticsearch.url: \"http://{{ elasticsearch_private_ip }}:9200\""
+      regexp: "^#elasticsearch.hosts"
+      line: 'elasticsearch.hosts: [ "http://{{ elasticsearch_private_ip }}:9200" ]'
 
 - name: "Update kibana.yml config file"
   lineinfile:
@@ -52,4 +52,3 @@
 - name: "Setup htpassword for nginx"
   shell: printf "{{ htdigest_user }}:$(openssl passwd -1 {{ htdigest_password }} )\n" >> /etc/nginx/htdigest
   notify: Restart Nginx
-

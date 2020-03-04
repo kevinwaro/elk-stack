@@ -1,16 +1,45 @@
 ---
+- name: "Install dependencies"
+  apt:
+      name: "{{ item }}"
+      state: present
+  with_items:
+      - apt-transport-https
+      - wget
+      - gnupg
+      - software-properties-common
+
+- name: "Install AdoptOpenJDK gpg key"
+  apt_key:
+      url: https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public
+      state: present
+      
+- name: "Add AdoptOpenJDK repository"                                                                                    
+  apt_repository:
+      repo: "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ {{ ansible_distribution_release }} main"
+      state: present
+      filename: adoptopenjdk
+      
 - name: "Install openjdk8"
-  apt: update_cache=yes name=openjdk-8-jre-headless state=present
+  apt:
+      name: adoptopenjdk-8-hotspot
+      update_cache: yes
 
 - name: "Download Elasticsearch from elastic.co"
   get_url:
-      url: "https://artifacts.elastic.co/downloads/elasticsearch/{{ elasticsearch_version }}.deb"
-      dest: "/tmp/{{ elasticsearch_version }}.deb"
+      url: "https://artifacts.elastic.co/downloads/elasticsearch/{{ elasticsearch_version }}-amd64.deb"
+      dest: "/tmp/{{ elasticsearch_version }}-amd64.deb"
 
 - name: "Install Elasticsearch package"
-  command: "dpkg -i {{ elasticsearch_version }}.deb"
+  command: "dpkg -i {{ elasticsearch_version }}-amd64.deb"
   args:
       chdir: /tmp
+
+- name: "Update elasticsearch.yml config file"
+  lineinfile:
+      dest: "/etc/elasticsearch/elasticsearch.yml"
+      insertafter: "^# discovery.seed_hosts"
+      line: "discovery.type: single-node"
 
 - name: "Update elasticsearch.yml config file"
   lineinfile:
@@ -35,9 +64,3 @@
       name: elasticsearch
       enabled: yes
       state: started
-
-- name: "Install plugin for geoip"
-  command: "/usr/share/elasticsearch/bin/elasticsearch-plugin install -b ingest-geoip"
-
-- name: "Install plugin for user agents"
-  command: "/usr/share/elasticsearch/bin/elasticsearch-plugin install -b ingest-user-agent"
