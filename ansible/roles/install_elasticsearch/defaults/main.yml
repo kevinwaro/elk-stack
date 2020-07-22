@@ -1,4 +1,4 @@
-elasticsearch_version: elasticsearch-oss-7.6.0
+elasticsearch_version: elasticsearch-oss-7.8.0
 elasticsearch_private_ip: 192.168.200.10
 jvm_mem_start: 512m
 jvm_mem_max: 512m

@@ -9,25 +9,41 @@
   args:
       chdir: /tmp
 
-- name: "Update filebeat.yml config file"
-  lineinfile:
-      dest: "/etc/filebeat/filebeat.yml"
-      regexp: '^  hosts: \["localhost:9200"\]'
-      line: "  hosts: [\"{{ elasticsearch_private_ip }}:9200\"]"
+- name: "Configure filebeat for logstash"
+  block:
+      - name: "Update filebeat.yml config file"
+        lineinfile:
+            dest: "/etc/filebeat/filebeat.yml"
+            regexp: '^  hosts: \["localhost:9200"\]'
+            line: "  hosts: [\"{{ elasticsearch_private_ip }}:9200\"]"
+  when: use_logstash == 'false'
 
-- name: "Update filebeat.yml config file"
-  lineinfile:
-      dest: "/etc/filebeat/filebeat.yml"
-      regexp: '^  #host: "localhost:5601"'
-      line: "  host: \"{{ elasticsearch_private_ip }}:5601\""
-  when: use_logstash is undefined or use_logstash == False
+- name: "Configure filebeat for logstash"
+  block:
+      - name: "Update filebeat.yml config file"
+        lineinfile:
+            dest: "/etc/filebeat/filebeat.yml"
+            regexp: '^output.elasticsearch:'
+            line: "#output.elasticsearch:"
 
-- name: "Update filebeat.yml config file"
-  lineinfile:
-      dest: "/etc/filebeat/filebeat.yml"
-      regexp: '^  #host: "localhost:5044"'
-      line: "  hosts: [\"{{ logstash_private_ip }}:5044\"]"
-  when: use_logstash == True
+      - name: "Update filebeat.yml config file"
+        lineinfile:
+            dest: "/etc/filebeat/filebeat.yml"
+            regexp: '^  hosts: ["localhost:5044"]'
+            line: '#  hosts: ["localhost:5044"]'
+
+      - name: "Update filebeat.yml config file"
+        lineinfile:
+            dest: "/etc/filebeat/filebeat.yml"
+            regexp: '^#output.logstash'
+            line: "output.logstash:"
+
+      - name: "Update filebeat.yml config file"
+        lineinfile:
+            dest: "/etc/filebeat/filebeat.yml"
+            insertafter: '^output.logstash'
+            line: "  hosts: [\"{{ logstash_private_ip }}:5044\"]"
+  when: use_logstash == 'true'
 
 - name: "Enable and restart Filebeat service"
   service:

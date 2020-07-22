@@ -1,4 +1,4 @@
-filebeat_version: filebeat-oss-7.6.0
+filebeat_version: filebeat-oss-7.8.0
 elasticsearch_private_ip: 192.168.200.10
 kibana_private_ip: 192.168.200.10
 logstash_private_ip: 192.168.200.10

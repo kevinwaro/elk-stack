@@ -1,3 +1,3 @@
-logstash_version: logstash-oss-7.6.0
+logstash_version: logstash-oss-7.8.0
 logstash_private_ip: 192.168.200.10
 elasticsearch_private_ip: 192.168.200.10
