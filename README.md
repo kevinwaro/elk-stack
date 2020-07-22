@@ -13,7 +13,7 @@ First clone the git repo:
 
 Then let Vagrant play the music:
 
-    vagrant up
+    vagrant up elasticsearch client
 
 ### Kibana Dashboard:
 
