@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
        "target" => "elasticsearch",
        "elasticsearch_private_ip" => "192.168.200.10",
        "logstash_private_ip" => "192.168.200.10",
-       "use_logstash" => "False"
+       "use_logstash" => "false"
       }
    end
  end
@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
        "apache_server_name" => "client.local",
        "kibana_private_ip" => "192.168.200.10",
        "logstash_private_ip" => "192.168.200.10",
-       "use_logstash" => "False"
+       "use_logstash" => "false"
       }
    end
  end

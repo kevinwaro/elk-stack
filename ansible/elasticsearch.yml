@@ -5,6 +5,6 @@
   become_user: root
   roles:
      - role: install_logstash
-       when: use_logstash == True
+       when: use_logstash == 'true'
      - role: install_elasticsearch
      - role: install_kibana
