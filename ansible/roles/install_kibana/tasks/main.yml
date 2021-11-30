@@ -19,36 +19,10 @@
   lineinfile:
       dest: "/etc/kibana/kibana.yml"
       regexp: "^#server.host"
-      line: "server.host: \"localhost\""
+      line: 'server.host: "{{ elasticsearch_private_ip }}"'
 
 - name: "Enable and restart  kibana service"
   service:
       name: kibana
       enabled: yes
       state: started
-
-- name: "Install Nginx"
-  apt: name=nginx state=present
-
-- name: "Enable Nginx"
-  service: name=nginx enabled=yes
-
-- name: "Delete default virtualhost symlink"
-  file:
-      path: "/etc/nginx/sites-enabled/default"
-      state: absent
-
-- name: "Create a kibana virtualhost"
-  template:
-      src: kibana_virtualhost.template.j2
-      dest: "/etc/nginx/sites-available/{{ kibana_server_name }}.conf"
-
-- name: "Create the virtualhost symlink in sites-enabled"
-  file:
-      src: "/etc/nginx/sites-available/{{ kibana_server_name }}.conf"
-      dest: "/etc/nginx/sites-enabled/{{ kibana_server_name }}.conf"
-      state: link
-
-- name: "Setup htpassword for nginx"
-  shell: printf "{{ htdigest_user }}:$(openssl passwd -1 {{ htdigest_password }} )\n" >> /etc/nginx/htdigest
-  notify: Restart Nginx
