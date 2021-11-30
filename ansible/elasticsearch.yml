@@ -8,3 +8,4 @@
        when: use_logstash == 'true'
      - role: install_elasticsearch
      - role: install_kibana
+     - role: install_filebeat
