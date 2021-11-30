@@ -50,3 +50,7 @@
       name: filebeat
       enabled: yes
       state: started
+
+- name: "Enable system module"
+  command: "filebeat modules enable system"
+  notify: "Restart filebeat"
