@@ -20,9 +20,9 @@
       state: present
       filename: adoptopenjdk
       
-- name: "Install openjdk8"
+- name: "Install openjdk11"
   apt:
-      name: adoptopenjdk-8-hotspot
+      name: adoptopenjdk-11-hotspot
       update_cache: yes
 
 - name: "Download Logstash from elastic.co"

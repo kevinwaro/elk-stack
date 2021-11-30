@@ -3,10 +3,11 @@
   apt:
       name: "{{ item }}"
       state: present
+      update_cache: yes
   with_items:
       - apt-transport-https
       - wget
-      - gnupg
+      - gnupg2
       - software-properties-common
 
 - name: "Install AdoptOpenJDK gpg key"
@@ -20,9 +21,9 @@
       state: present
       filename: adoptopenjdk
       
-- name: "Install openjdk8"
+- name: "Install openjdk11"
   apt:
-      name: adoptopenjdk-8-hotspot
+      name: adoptopenjdk-11-hotspot
       update_cache: yes
 
 - name: "Download Elasticsearch from elastic.co"
